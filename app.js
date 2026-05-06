@@ -3,13 +3,20 @@ const app = express();
 const port = 3000;
 app.use(express.urlencoded({ extended: true }));
 const Mydata = require('./models/mydataSchema');
+app.set('view engine', 'ejs');
 
-app.get('/', (req, res) => {
-    res.sendFile('./view/home.html', { root: __dirname });
+app.get("/", (req, res) => {
+    Mydata.find()
+        .then((result) => {
+            res.render('home', { mytitle : "Home Page", arr : result });
+        })
+        .catch((err) => {
+            console.log(err);
+        });
 });
 
 app.get('/index.html', (req, res) => {
-    res.sendFile('./view/index.html', { root: __dirname });
+    res.sendFile('./views/index.html', { root: __dirname });
 });
 
 //Connexion à la base de données

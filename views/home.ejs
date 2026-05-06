@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/static/style.css">
-    <title>My App</title>
+    <title><%= mytitle %></title>
 </head>
 
 <body>
@@ -16,6 +16,8 @@
             <input type="text" name="userName" placeholder="Saisir votre nom">
             <button type="submit">Envoyer</button>
         </form>
+        <br>
+        <p class="description" style="font-weight: bold;">Votre nom est : <%= arr.at(-1).userName %></p>
     </div>
 </body>
 
