@@ -16,26 +16,30 @@ const connectLivereload = require("connect-livereload");
 app.use(connectLivereload());
 
 liveReloadServer.server.once("connection", () => {
-  setTimeout(() => {
-    liveReloadServer.refresh("/");
-  }, 100);
+    setTimeout(() => {
+        liveReloadServer.refresh("/");
+    }, 100);
 });
 
 
 
 
 app.get("/", (req, res) => {
-    Mydata.find()
-        .then((result) => {
-            res.render('home', { mytitle : "Home Page", arr : result });
-        })
-        .catch((err) => {
-            console.log(err);
-        });
+
+    res.render('index', { });
+
 });
 
-app.get('/index.html', (req, res) => {
-    res.sendFile('./views/index.html', { root: __dirname });
+app.get('/user/add.html', (req, res) => {
+    res.render('user/add');
+});
+
+app.get('/user/view.html', (req, res) => {
+    res.render('user/view');
+});
+
+app.get('/user/edit.html', (req, res) => {
+    res.render('user/edit');
 });
 
 //Connexion à la base de données
@@ -66,5 +70,5 @@ app.post('/', (req, res) => {
             console.error('Error saving data to MongoDB:', err);
         });
 
-    res.redirect('/index.html');
+    res.redirect('/enregistrement.html');
 });
