@@ -2,7 +2,6 @@ const express = require('express');
 const app = express();
 const port = 3000;
 app.use(express.urlencoded({ extended: true }));
-const Mydata = require('./models/mydataSchema');
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
 
@@ -22,11 +21,11 @@ liveReloadServer.server.once("connection", () => {
 });
 
 
-
+//Get routes
 
 app.get("/", (req, res) => {
 
-    res.render('index', { });
+    res.render('index', {});
 
 });
 
@@ -42,8 +41,23 @@ app.get('/user/edit.html', (req, res) => {
     res.render('user/edit');
 });
 
+//Post routes
+app.post('/', (req, res) => {
+
+    const user = new User(req.body);
+    user.save()
+        .then(() => {
+            console.log('User saved to MongoDB');
+        })
+        .catch((err) => {
+            console.error('Error saving user to MongoDB:', err);
+        });
+    res.redirect('/user/add.html');
+});
+
 //Connexion à la base de données
 const mongoose = require('mongoose');
+const User = require('./models/customerSchema');
 mongoose.connect('mongodb+srv://nodeJS:qYz4ZtwKW6gJRluj@cluster0.udxide4.mongodb.net/all-data?appName=Cluster0')
 
     .then(() => {
@@ -58,17 +72,16 @@ mongoose.connect('mongodb+srv://nodeJS:qYz4ZtwKW6gJRluj@cluster0.udxide4.mongodb
 
 app.use('/static', express.static(__dirname + '/static'));
 
-app.post('/', (req, res) => {
-    console.log(req.body);
+app.post('/user/add.html', (req, res) => {
+    const user = new User(req.body);
 
-    const myData = new Mydata(req.body);
-    myData.save()
+    user.save()
         .then(() => {
-            console.log('Data saved to MongoDB');
+            console.log('User saved to MongoDB');
+            res.redirect('/user/add.html');
         })
         .catch((err) => {
-            console.error('Error saving data to MongoDB:', err);
+            console.error(err);
+            res.send('Erreur lors de l’enregistrement');
         });
-
-    res.redirect('/enregistrement.html');
 });
