@@ -40,13 +40,32 @@ app.get('/user/add.html', (req, res) => {
     res.render('user/add');
 });
 
-app.get('/user/view.html', (req, res) => {
-    res.render('user/view');
+
+app.get("/", (req, res) => {
+
+    User.find()
+    .then((result) => {
+        console.log('Users fetched from MongoDB:', result);
+        res.render('index', {arr: result});
+    })
+    .catch((err) => {
+        console.log('Error fetching users from MongoDB:', err);
+        res.render('index', {arr: []});
+    });
 });
 
-app.get('/user/edit.html', (req, res) => {
-    res.render('user/edit');
+app.get('/user/:id', (req, res) => {
+    User.findById(req.params.id)
+    .then((result) => {
+        res.render('user/view', {obj: result});
+    })
+    .catch((err) => {
+        res.send('User not found');
+    });
 });
+
+
+
 
 //Post routes
 app.post('/user/add.html', (req, res) => {
