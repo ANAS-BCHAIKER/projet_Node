@@ -4,6 +4,8 @@ const port = 3000;
 app.use(express.urlencoded({ extended: true }));
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
+var moment = require('moment');
+
 
 //Auto refresh
 const path = require("path");
@@ -28,7 +30,7 @@ app.get("/", (req, res) => {
     User.find()
     .then((result) => {
         console.log('Users fetched from MongoDB:', result);
-        res.render('index', {arr: result});
+        res.render('index', {arr: result, moment: moment});
     })
     .catch((err) => {
         console.log('Error fetching users from MongoDB:', err);
@@ -57,15 +59,12 @@ app.get("/", (req, res) => {
 app.get('/user/:id', (req, res) => {
     User.findById(req.params.id)
     .then((result) => {
-        res.render('user/view', {obj: result});
+        res.render('user/view', {obj: result, moment: moment});
     })
     .catch((err) => {
         res.send('User not found');
     });
 });
-
-
-
 
 //Post routes
 app.post('/user/add.html', (req, res) => {
