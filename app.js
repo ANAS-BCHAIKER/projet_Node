@@ -25,8 +25,15 @@ liveReloadServer.server.once("connection", () => {
 
 app.get("/", (req, res) => {
 
-    res.render('index', {});
-
+    User.find()
+    .then((result) => {
+        console.log('Users fetched from MongoDB:', result);
+        res.render('index', {arr: result});
+    })
+    .catch((err) => {
+        console.log('Error fetching users from MongoDB:', err);
+        res.render('index', {arr: []});
+    });
 });
 
 app.get('/user/add.html', (req, res) => {
@@ -42,17 +49,16 @@ app.get('/user/edit.html', (req, res) => {
 });
 
 //Post routes
-app.post('/', (req, res) => {
+app.post('/user/add.html', (req, res) => {
 
     const user = new User(req.body);
     user.save()
         .then(() => {
-            console.log('User saved to MongoDB');
+            res.redirect('/');
         })
         .catch((err) => {
             console.error('Error saving user to MongoDB:', err);
         });
-    res.redirect('/user/add.html');
 });
 
 //Connexion à la base de données
