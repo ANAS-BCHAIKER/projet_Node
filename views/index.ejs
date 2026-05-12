@@ -33,65 +33,73 @@
 
           <%- include('./Components/navbar.ejs') %>
 
-            <table style="width: 99%" class="text-center mx-auto table mt-5 table-striped table-bordered">
-              <thead>
-                <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">Full Name</th>
-                  <th scope="col">Gender</th>
-                  <th scope="col">Country</th>
-                  <th scope="col">Age</th>
-                  <th scope="col">Last updated</th>
-                  <th scope="col">Action</th>
-                </tr>
-              </thead>
-              <tbody>
+            <% if (arr.length===0) { %>
+              <h1 style="text-align: center; margin-top: 4em;">No data available</h1>
+              <% } %>
 
-                <% arr.forEach((item, index)=> {%>
+          <% if (arr.length > 0) { %>
+              <table style="width: 99%" class="text-center mx-auto table mt-5 table-striped table-bordered">
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Full Name</th>
+                        <th scope="col">Gender</th>
+                        <th scope="col">Country</th>
+                        <th scope="col">Age</th>
+                        <th scope="col">Last updated</th>
+                        <th scope="col">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
 
-                  <tr>
-                    <th scope="row">
-                      <%= index + 1 %>
-                    </th>
-                    <td>
-                      <%= item.fireName %>
-                        <%= item.lastName %>
-                    </td>
-                    <td>
-                      <%= item.gender %>
-                    </td>
-                    <td>
-                      <%= item.country %>
-                    </td>
-                    <td>
-                      <%= item.age %>
-                    </td>
-                    <td>
-                      <%= moment(item.updatedAt).fromNow(); %>
-                    </td>
-                    <td>
-                      <a data-bs-toggle="tooltip" data-bs-title="View details" data-bs-placement="top"
-                        class="btn btn-primary btn-sm" href="/view/<%= item._id %>"><i class="bi bi-eye"></i></a>
+                      <% arr.forEach((item, index)=> {%>
 
-                      <a data-bs-toggle="tooltip" data-bs-title="Edit user" data-bs-placement="top"
-                        class="btn btn-primary btn-sm" href="./edit/<%= item._id %>">
-                        <i class="bi bi-pencil"></i>
-                      </a>
+                        <tr>
+                          <th scope="row">
+                            <%= index + 1 %>
+                          </th>
+                          <td>
+                            <%= item.fireName %>
+                              <%= item.lastName %>
+                          </td>
+                          <td>
+                            <%= item.gender %>
+                          </td>
+                          <td>
+                            <%= item.country %>
+                          </td>
+                          <td>
+                            <%= item.age %>
+                          </td>
+                          <td>
+                            <%= moment(item.updatedAt).fromNow(); %>
+                          </td>
+                          <td>
+                            <a data-bs-toggle="tooltip" data-bs-title="View details" data-bs-placement="top"
+                              class="btn btn-primary btn-sm" href="/view/<%= item._id %>"><i class="bi bi-eye"></i></a>
 
-                      <form style="display: inline;" action="/edit/<%= item._id %>?_method=DELETE" method="post">
-                        <button data-bs-toggle="tooltip" data-bs-title="Delete user" data-bs-placement="top"
-                          class="btn btn-danger btn-sm">
-                          <i class="bi bi-trash"></i>
-                        </button>
-                      </form>
+                            <a data-bs-toggle="tooltip" data-bs-title="Edit user" data-bs-placement="top"
+                              class="btn btn-primary btn-sm" href="./edit/<%= item._id %>">
+                              <i class="bi bi-pencil"></i>
+                            </a>
 
-                    </td>
-                  </tr>
+                            <form style="display: inline;" action="/edit/<%= item._id %>?_method=DELETE" method="post">
+                              <button data-bs-toggle="tooltip" data-bs-title="Delete user" data-bs-placement="top"
+                                class="btn btn-danger btn-sm">
+                                <i class="bi bi-trash"></i>
+                              </button>
+                            </form>
 
-                  <%})%>
+                          </td>
+                        </tr>
 
-              </tbody>
-            </table>
+                        <%})%>
+
+                    </tbody>
+              </table>
+
+          <% } %>
+
         </section>
     </main>
     <script src="./js/bootstrap.bundle.min.js"></script>

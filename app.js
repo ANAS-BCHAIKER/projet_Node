@@ -49,7 +49,7 @@ app.get("/", (req, res) => {
 
     User.find()
         .then((result) => {
-            res.render('index', { arr: result });
+            res.render('index', { arr: result, moment: moment });
         })
         .catch((err) => {
             res.render('index', { arr: [] });
@@ -58,12 +58,12 @@ app.get("/", (req, res) => {
 
 app.get('/edit/:id', (req, res) => {
     User.findById(req.params.id)
-    .then((result) => {
-        res.render('user/edit', { obj: result, moment: moment });
-    })
-    .catch((err) => {
-        res.send('User not found');
-    });
+        .then((result) => {
+            res.render('user/edit', { obj: result, moment: moment });
+        })
+        .catch((err) => {
+            res.send('User not found');
+        });
 });
 
 app.get('/view/:id', (req, res) => {
@@ -79,8 +79,7 @@ app.get('/view/:id', (req, res) => {
 //Post routes
 app.post('/user/add.html', (req, res) => {
 
-    const user = new User(req.body);
-    user.save()
+    User.create(req.body)
         .then(() => {
             res.redirect('/');
         })
@@ -97,6 +96,18 @@ app.delete('/edit/:id', (req, res) => {
         .catch((err) => {
             console.error('Error deleting user from MongoDB:', err);
             res.send('Error deleting user');
+        });
+});
+
+// Update route
+app.put('/edit/:id', (req, res) => {
+    User.updateOne({ _id: req.params.id }, req.body)
+        .then(() => {
+            res.redirect('/');
+        })
+        .catch((err) => {
+            console.error('Error updating user in MongoDB:', err);
+            res.send('Error updating user');
         });
 });
 //Connexion à la base de données
