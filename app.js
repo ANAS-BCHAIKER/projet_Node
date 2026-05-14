@@ -6,6 +6,7 @@ app.set('view engine', 'ejs');
 app.use(express.static('public'));
 const allRoutes = require('./routes/allroutes');
 const addUserRoutes = require('./routes/addUser');
+const userController = require('./controllers/userController');
 
 
 

@@ -2,108 +2,25 @@ const express = require('express');
 const router = express.Router();
 const moment = require('moment');
 const User = require('../models/customerSchema');
+const userController = require('../controllers/userController');
+
 
 
 //Get routes
 
-router.get("/", (req, res) => {
+router.get("/", userController.user_index_get);
 
-    User.find()
-        .then((result) => {
-            console.log('Users fetched from MongoDB:', result);
-            res.render('index', { arr: result, moment: moment });
-        })
-        .catch((err) => {
-            console.log('Error fetching users from MongoDB:', err);
-            res.render('index', { arr: [] });
-        });
-});
+router.get("/edit/:id", userController.user_edit_get);
 
-
-
-router.get("/", (req, res) => {
-
-    User.find()
-        .then((result) => {
-            res.render('index', { arr: result, moment: moment });
-        })
-        .catch((err) => {
-            res.render('index', { arr: [] });
-        });
-});
-
-router.get('/edit/:id', (req, res) => {
-    User.findById(req.params.id)
-        .then((result) => {
-            res.render('user/edit', { obj: result, moment: moment });
-        })
-        .catch((err) => {
-            res.send('User not found');
-        });
-});
-
-router.get('/view/:id', (req, res) => {
-    User.findById(req.params.id)
-        .then((result) => {
-            res.render('user/view', { obj: result, moment: moment });
-        })
-        .catch((err) => {
-            res.send('User not found');
-        });
-});
+router.get('/view/:id', userController.user_view_get);
 
 //Post routes
-router.post('/user/add.html', (req, res) => {
+router.post('/search', userController.user_search_post);
 
-    User.create(req.body)
-        .then(() => {
-            res.redirect('/');
-        })
-        .catch((err) => {
-            console.error('Error saving user to MongoDB:', err);
-        });
-});
-
-router.post('/search', (req, res) => {
-
-    User.find({
-        $or: [{ fireName: { $regex: req.body.search.trim(), $options: 'i' } },
-        { lastName: { $regex: req.body.search.trim(), $options: 'i' } }]
-    })
-        .then((result) => {
-            console.log('Search results from MongoDB:', result);
-            res.render('index', { arr: result, moment: moment });
-        })
-        .catch((err) => {
-            console.error('Error searching users in MongoDB:', err);
-            res.render('index', { arr: [] });
-        });
-
-});
-
-router.delete('/edit/:id', (req, res) => {
-    User.findByIdAndDelete(req.params.id)
-        .then(() => {
-            res.redirect('/');
-        })
-        .catch((err) => {
-            console.error('Error deleting user from MongoDB:', err);
-            res.send('Error deleting user');
-        });
-});
+router.delete('/edit/:id', userController.user_delete);
 
 // Update route
-router.put('/edit/:id', (req, res) => {
-    User.updateOne({ _id: req.params.id }, req.body)
-        .then(() => {
-            res.redirect('/');
-        })
-        .catch((err) => {
-            console.error('Error updating user in MongoDB:', err);
-            res.send('Error updating user');
-        });
-});
-
+router.put('/edit/:id', userController.user_put);
 
 
 

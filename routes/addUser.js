@@ -2,28 +2,15 @@ const express = require('express');
 const router = express.Router();
 const moment = require('moment');
 const User = require('../models/customerSchema');
+const userController = require('../controllers/userController');
 
 
 
 
 
-router.get('', (req, res) => {
-    res.render('user/add');
-});
+router.get('', userController.user_add_get);
 
 
-router.post('', (req, res) => {
-    const user = new User(req.body);
-
-    user.save()
-        .then(() => {
-            console.log('User saved to MongoDB');
-            res.redirect('/user/add.html');
-        })
-        .catch((err) => {
-            console.error(err);
-            res.send('Erreur lors de l’enregistrement');
-        });
-});
+router.post('', userController.user_post);
 
 module.exports = router;
